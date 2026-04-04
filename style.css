@@ -1,0 +1,371 @@
+/* ========== Reset & Base ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    background-color: #fafafa;
+    line-height: 1.7;
+}
+
+a {
+    color: #1a73e8;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #0d47a1;
+}
+
+/* ========== Navigation ========== */
+#navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    z-index: 1000;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.nav-content {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    height: 56px;
+}
+
+.nav-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+.nav-name:hover {
+    color: #1a73e8;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 28px;
+}
+
+.nav-links a {
+    color: #555;
+    font-size: 0.95rem;
+    font-weight: 400;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.nav-links a:hover {
+    color: #1a73e8;
+    border-bottom-color: #1a73e8;
+}
+
+/* ========== Container ========== */
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 80px 20px 40px;
+}
+
+/* ========== Profile Section ========== */
+.profile-section {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    padding: 30px 0;
+}
+
+.profile-photo {
+    flex-shrink: 0;
+}
+
+.profile-photo img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #e0e0e0;
+    background-color: #e0e0e0;
+}
+
+.profile-info h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 4px;
+}
+
+.profile-info .title {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 2px;
+}
+
+.profile-info .affiliation {
+    font-size: 1rem;
+    margin-bottom: 16px;
+}
+
+.profile-info .bio {
+    font-size: 0.95rem;
+    color: #444;
+    margin-bottom: 16px;
+    text-align: justify;
+}
+
+.contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.contact-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    color: #555;
+    padding: 5px 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    transition: all 0.2s;
+}
+
+.contact-links a:hover {
+    color: #1a73e8;
+    border-color: #1a73e8;
+    background: #f0f6ff;
+}
+
+.location {
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: 6px;
+}
+
+/* ========== Section Styles ========== */
+.section {
+    padding: 28px 0;
+}
+
+.section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1a73e8;
+    display: inline-block;
+}
+
+.section-divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 0;
+}
+
+/* ========== Research Interests ========== */
+.research-areas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.research-area {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    transition: box-shadow 0.2s;
+}
+
+.research-area:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.research-area h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+}
+
+.research-area p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* ========== Publications ========== */
+.pub-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 18px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    transition: box-shadow 0.2s;
+}
+
+.pub-item:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.pub-venue {
+    flex-shrink: 0;
+    padding-top: 2px;
+}
+
+.venue-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.venue-badge.cvpr { background: #d32f2f; }
+.venue-badge.neurips { background: #7b1fa2; }
+.venue-badge.aaai { background: #1565c0; }
+.venue-badge.bigdata { background: #00838f; }
+.venue-badge.preprint { background: #757575; }
+
+.pub-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 4px;
+}
+
+.pub-authors {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.pub-desc {
+    font-size: 0.85rem;
+    color: #777;
+    line-height: 1.5;
+}
+
+/* ========== Education ========== */
+.edu-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.edu-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: #e8eaf6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a73e8;
+    font-size: 1rem;
+    margin-top: 2px;
+}
+
+.edu-content h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.edu-degree {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.edu-date {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* ========== Service ========== */
+.service-content p {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+/* ========== Footer ========== */
+footer {
+    text-align: center;
+    padding: 24px 20px;
+    color: #999;
+    font-size: 0.85rem;
+    border-top: 1px solid #eee;
+    margin-top: 20px;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+    .profile-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-info .bio {
+        text-align: left;
+    }
+
+    .contact-links {
+        justify-content: center;
+    }
+
+    .research-areas {
+        grid-template-columns: 1fr;
+    }
+
+    .pub-item {
+        flex-direction: column;
+    }
+
+    .nav-links {
+        gap: 16px;
+    }
+
+    .nav-links a {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-content {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 16px;
+        gap: 6px;
+    }
+
+    .profile-photo img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .profile-info h1 {
+        font-size: 1.5rem;
+    }
+}

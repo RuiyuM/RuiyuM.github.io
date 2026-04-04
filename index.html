@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruiyu Mao - PhD Student at UT Dallas</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="navbar">
+    <div class="nav-content">
+        <a href="#home" class="nav-name">Ruiyu Mao</a>
+        <ul class="nav-links">
+            <li><a href="#about">Home</a></li>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#service">Service</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+
+    <!-- Profile Section -->
+    <section id="about" class="profile-section">
+        <div class="profile-photo">
+            <img src="photo.jpg" alt="Ruiyu Mao">
+        </div>
+        <div class="profile-info">
+            <h1>Ruiyu Mao</h1>
+            <p class="title">Ph.D. Student in Computer Science</p>
+            <p class="affiliation"><a href="https://www.utdallas.edu/" target="_blank">The University of Texas at Dallas</a></p>
+            <p class="bio">
+                I am a Ph.D. student in Computer Science at the University of Texas at Dallas (expected May 2027).
+                My research focuses on <strong>Computer Vision &amp; Data-Efficient Learning</strong> and
+                <strong>Efficient LLMs &amp; Multimodal Large Language Models</strong>.
+                Specifically, I work on active learning, submodular optimization, data selection, 3D object detection,
+                BEV perception, LiDAR perception, vision-language models, and multimodal DPO.
+            </p>
+            <div class="contact-links">
+                <a href="mailto:ruiyumao360@gmail.com" title="Email"><i class="fas fa-envelope"></i> Email</a>
+                <a href="https://github.com/ruiyumao" target="_blank" title="GitHub"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://linkedin.com/in/ruiyumao" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <a href="https://scholar.google.com/" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i> Scholar</a>
+                <a href="cv.pdf" target="_blank" title="CV"><i class="fas fa-file-pdf"></i> CV</a>
+            </div>
+            <p class="location"><i class="fas fa-map-marker-alt"></i> Richardson, TX, USA</p>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Research Interests -->
+    <section id="research" class="section">
+        <h2>Research Interests</h2>
+        <div class="research-areas">
+            <div class="research-area">
+                <h3>Computer Vision &amp; Data-Efficient Learning</h3>
+                <p>Active learning, submodular optimization, data selection, open-set learning, 3D object detection, BEV perception, LiDAR perception, LiDAR semantic segmentation, autonomous driving.</p>
+            </div>
+            <div class="research-area">
+                <h3>Efficient LLMs &amp; Multimodal Large Language Models</h3>
+                <p>Vision-language models, multimodal learning, vision token reduction, attention-driven self-compression, efficient training, efficient inference, learnability-aware training, active data selection, multimodal DPO.</p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Publications -->
+    <section id="publications" class="section">
+        <h2>Publications</h2>
+
+        <div class="pub-item">
+            <div class="pub-venue"><span class="venue-badge cvpr">CVPR 2026</span></div>
+            <div class="pub-content">
+                <p class="pub-title">Learnability-Driven Submodular Optimization for Active Roadside BEV Perception</p>
+                <p class="pub-authors"><strong>Ruiyu Mao</strong>, Baoming Zhang, Nicholas Ruozzi, Yunhui Guo</p>
+                <p class="pub-desc">Proposed LH3D, a learnability-driven submodular framework for roadside monocular 3D detection that explicitly modeled ambiguous roadside-only scenes and selected camera views that were both highly informative and reliably labelable on DAIR-V2X-I.</p>
+            </div>
+        </div>
+
+        <div class="pub-item">
+            <div class="pub-venue"><span class="venue-badge bigdata">BigData 2025</span></div>
+            <div class="pub-content">
+                <p class="pub-title">Vision Token Reduction via Attention-Driven Self-Compression for Efficient Multimodal Large Language Models</p>
+                <p class="pub-authors">Omer Faruk Deniz, <strong>Ruiyu Mao</strong>, Ruochen Li, Yapeng Tian, Latifur Khan</p>
+                <p class="pub-desc">Designed an attention-driven self-compression mechanism that leveraged the LVLM's own attention patterns to aggregate dense vision tokens into a compact set of summary tokens, removing redundant vision tokens while preserving accuracy.</p>
+            </div>
+        </div>
+
+        <div class="pub-item">
+            <div class="pub-venue"><span class="venue-badge neurips">NeurIPS 2024</span></div>
+            <div class="pub-content">
+                <p class="pub-title">STONE: A Submodular Optimization Framework for Active 3D Object Detection</p>
+                <p class="pub-authors"><strong>Ruiyu Mao</strong>, Sarthak Kumar Maharana, Rishabh K. Iyer, Yunhui Guo</p>
+                <p class="pub-desc">Proposed STONE, the first submodular optimization framework for active 3D object detection, with a two-stage algorithm achieving strong label efficiency on KITTI and Waymo.</p>
+            </div>
+        </div>
+
+        <div class="pub-item">
+            <div class="pub-venue"><span class="venue-badge aaai">AAAI 2024</span></div>
+            <div class="pub-content">
+                <p class="pub-title">Inconsistency-Based Data-Centric Active Open-Set Annotation</p>
+                <p class="pub-authors"><strong>Ruiyu Mao</strong>, Xu Ouyang, Yunhui Guo</p>
+                <p class="pub-desc">Introduced NEAT, a data-centric active open-set annotation method that used CLIP features and label clusterability to detect known-class samples, and an inconsistency score to select informative queries while avoiding unknown classes.</p>
+            </div>
+        </div>
+
+        <div class="pub-item">
+            <div class="pub-venue"><span class="venue-badge preprint">Under Review</span></div>
+            <div class="pub-content">
+                <p class="pub-title">SELECT: A Submodular Approach for Active LiDAR Semantic Segmentation</p>
+                <p class="pub-authors"><strong>Ruiyu Mao</strong>, Sarthak Kumar Maharana, Xulong Tang, Yunhui Guo</p>
+                <p class="pub-desc">Developed SELECT, a voxel-centric submodular pipeline for LiDAR semantic segmentation on SemanticPOSS, SemanticKITTI, and nuScenes under limited annotation budgets.</p>
+            </div>
+        </div>
+
+        <div class="pub-item">
+            <div class="pub-venue"><span class="venue-badge preprint">In Prep</span></div>
+            <div class="pub-content">
+                <p class="pub-title">Learnability-Aware Active Multimodal Direct Preference Optimization</p>
+                <p class="pub-authors"><strong>Ruiyu Mao</strong>, Omer Faruk Deniz</p>
+                <p class="pub-desc">Developed an active multimodal DPO framework that used learnability-aware scoring to select informative image–text preference pairs, improving multimodal alignment while reducing preference data and training cost.</p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Education -->
+    <section id="education" class="section">
+        <h2>Education</h2>
+        <div class="edu-item">
+            <div class="edu-icon"><i class="fas fa-university"></i></div>
+            <div class="edu-content">
+                <h3>The University of Texas at Dallas</h3>
+                <p class="edu-degree">Ph.D. in Computer Science &middot; GPA: 3.62/4.00</p>
+                <p class="edu-date">Jan. 2024 &ndash; May 2027 (Expected)</p>
+            </div>
+        </div>
+        <div class="edu-item">
+            <div class="edu-icon"><i class="fas fa-university"></i></div>
+            <div class="edu-content">
+                <h3>The University of Texas at Dallas</h3>
+                <p class="edu-degree">M.S. in Computer Science &middot; GPA: 3.62/4.00</p>
+                <p class="edu-date">Aug. 2021 &ndash; Dec. 2023</p>
+            </div>
+        </div>
+        <div class="edu-item">
+            <div class="edu-icon"><i class="fas fa-university"></i></div>
+            <div class="edu-content">
+                <h3>Case Western Reserve University</h3>
+                <p class="edu-degree">B.S. in Aerospace Engineering</p>
+                <p class="edu-date">Aug. 2017 &ndash; May 2021</p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Service -->
+    <section id="service" class="section">
+        <h2>Professional Service</h2>
+        <div class="service-content">
+            <p><strong>Reviewer:</strong> CVPR, AAAI, NeurIPS, TMLR</p>
+        </div>
+    </section>
+
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2026 Ruiyu Mao. Last updated: April 2026.</p>
+</footer>
+
+</body>
+</html>
