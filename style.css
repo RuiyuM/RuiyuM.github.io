@@ -289,6 +289,14 @@ a:hover {
     line-height: 1.5;
 }
 
+.pub-fig {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 12px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+}
+
 /* ========== Education ========== */
 .edu-item {
     display: flex;
