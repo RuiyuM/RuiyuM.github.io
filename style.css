@@ -157,6 +157,30 @@ a:hover {
     margin-top: 6px;
 }
 
+/* ========== News ========== */
+.news-list {
+    list-style: none;
+    padding: 0;
+}
+
+.news-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.6;
+}
+
+.news-list li:last-child {
+    border-bottom: none;
+}
+
+.news-date {
+    font-weight: 600;
+    color: #1a73e8;
+    margin-right: 6px;
+}
+
 /* ========== Section Styles ========== */
 .section {
     padding: 28px 0;
