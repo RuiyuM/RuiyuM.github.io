@@ -84,6 +84,7 @@
         <ul class="nav-links">
             <li><a href="#about">Home</a></li>
             <li><a href="#news">News</a></li>
+            <li><a href="#trading">Trading</a></li>
             <li><a href="#publications">Publications</a></li>
             <li><a href="#education">Education</a></li>
             <li><a href="#service">Service</a></li>
@@ -134,6 +135,61 @@
             <li><span class="news-date">[Sep 2024]</span> One paper accepted to <strong>NeurIPS 2024</strong>.</li>
             <li><span class="news-date">[Dec 2023]</span> One paper accepted to <strong>AAAI 2024</strong>.</li>
         </ul>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Trading Status -->
+    <section id="trading" class="section trading-section">
+        <h2>Trading Status</h2>
+        <div class="trading-status" id="trading-status" aria-live="polite">
+            <div class="trading-summary">
+                <div>
+                    <p class="status-label">Private account status</p>
+                    <p class="status-value">Indexed performance</p>
+                </div>
+                <div>
+                    <p class="status-label">Last update</p>
+                    <p class="status-time" id="status-updated">Waiting for daily snapshot</p>
+                </div>
+            </div>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <div class="chart-head">
+                        <div>
+                            <h3>Options USDT + USDC</h3>
+                            <p class="status-detail">Daily indexed curve, base 100</p>
+                        </div>
+                        <div class="chart-metric">
+                            <span id="status-option-total">--</span>
+                            <small>Index</small>
+                        </div>
+                    </div>
+                    <svg id="option-curve" class="equity-chart" viewBox="0 0 640 220" role="img" aria-label="Options equity curve"></svg>
+                    <div class="position-row">
+                        <span class="status-label">Positions</span>
+                        <span id="status-option-positions">Flat</span>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-head">
+                        <div>
+                            <h3>Futures USDT</h3>
+                            <p class="status-detail">Daily indexed curve, base 100</p>
+                        </div>
+                        <div class="chart-metric">
+                            <span id="status-futures-index">--</span>
+                            <small>Index</small>
+                        </div>
+                    </div>
+                    <svg id="futures-curve" class="equity-chart" viewBox="0 0 640 220" role="img" aria-label="Futures USDT equity curve"></svg>
+                    <div class="position-row">
+                        <span class="status-label">Position</span>
+                        <span id="status-futures-position">Flat</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <hr class="section-divider">
@@ -266,6 +322,261 @@
 <footer>
     <p>&copy; 2026 Ruiyu Mao. Last updated: April 2026.</p>
 </footer>
+
+<script>
+function formatIndex(value) {
+    if (typeof value !== 'number' || !Number.isFinite(value)) return '--';
+    return value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function setText(id, value) {
+    const node = document.getElementById(id);
+    if (node) node.textContent = value;
+}
+
+function formatOptionPositions(positions) {
+    if (!Array.isArray(positions) || positions.length === 0) return 'Flat';
+    return positions
+        .map((position) => `${position.symbol || 'OPTION'} ${position.side || ''}`.trim())
+        .join(' / ');
+}
+
+function formatFuturesPosition(positions) {
+    if (!Array.isArray(positions) || positions.length === 0) return 'Flat';
+    const position = positions[0];
+    const side = position.side || 'Flat';
+    const symbol = position.symbol || 'BTCUSDT';
+    return `${symbol} ${side}`;
+}
+
+const chartStates = {};
+
+function getInitialChartWindow(points) {
+    const end = points.length - 1;
+    const start = Math.max(0, end - 89);
+    return { start, end };
+}
+
+function clampChartWindow(window, pointCount) {
+    if (pointCount <= 2) return { start: 0, end: Math.max(pointCount - 1, 0) };
+    let start = Math.max(0, Math.min(window.start, pointCount - 2));
+    let end = Math.max(start + 1, Math.min(window.end, pointCount - 1));
+    if (end >= pointCount) {
+        const span = end - start;
+        end = pointCount - 1;
+        start = Math.max(0, end - span);
+    }
+    return { start, end };
+}
+
+function resetCurve(svgId) {
+    const state = chartStates[svgId];
+    if (!state) return;
+    state.window = getInitialChartWindow(state.points);
+    drawCurve(svgId);
+}
+
+function installChartInteractions(svgId) {
+    const svg = document.getElementById(svgId);
+    if (!svg || svg.dataset.interactive === '1') return;
+    svg.dataset.interactive = '1';
+    svg.addEventListener('wheel', (event) => {
+        const state = chartStates[svgId];
+        if (!state || state.points.length < 3) return;
+        event.preventDefault();
+        const rect = svg.getBoundingClientRect();
+        const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+        const current = state.window;
+        const span = current.end - current.start;
+        const zoomIn = event.deltaY < 0;
+        const nextSpan = Math.max(2, Math.min(state.points.length - 1, Math.round(span * (zoomIn ? 0.78 : 1.28))));
+        const center = current.start + span * ratio;
+        state.window = clampChartWindow({
+            start: Math.round(center - nextSpan * ratio),
+            end: Math.round(center + nextSpan * (1 - ratio))
+        }, state.points.length);
+        drawCurve(svgId);
+    }, { passive: false });
+
+    let dragging = null;
+    svg.addEventListener('pointerdown', (event) => {
+        const state = chartStates[svgId];
+        if (!state || state.points.length < 3) return;
+        svg.setPointerCapture(event.pointerId);
+        dragging = {
+            x: event.clientX,
+            window: { ...state.window }
+        };
+        svg.classList.add('is-dragging');
+    });
+    svg.addEventListener('pointermove', (event) => {
+        const state = chartStates[svgId];
+        if (!state || !dragging) return;
+        const rect = svg.getBoundingClientRect();
+        const span = dragging.window.end - dragging.window.start;
+        const deltaPoints = Math.round(((event.clientX - dragging.x) / rect.width) * span);
+        state.window = clampChartWindow({
+            start: dragging.window.start - deltaPoints,
+            end: dragging.window.end - deltaPoints
+        }, state.points.length);
+        drawCurve(svgId);
+    });
+    svg.addEventListener('pointerup', (event) => {
+        dragging = null;
+        svg.classList.remove('is-dragging');
+        try {
+            svg.releasePointerCapture(event.pointerId);
+        } catch (error) {}
+    });
+    svg.addEventListener('pointercancel', () => {
+        dragging = null;
+        svg.classList.remove('is-dragging');
+    });
+    svg.addEventListener('dblclick', () => resetCurve(svgId));
+}
+
+function drawCurve(svgId, rows, key) {
+    const svg = document.getElementById(svgId);
+    if (!svg) return;
+    if (Array.isArray(rows)) {
+        const points = rows
+            .map((row) => ({
+                date: row.date_utc || '',
+                value: Number(row[key])
+            }))
+            .filter((row) => Number.isFinite(row.value));
+        chartStates[svgId] = {
+            key,
+            points,
+            window: chartStates[svgId]?.window || getInitialChartWindow(points)
+        };
+        installChartInteractions(svgId);
+    }
+
+    const state = chartStates[svgId];
+    const points = state?.points || [];
+
+    svg.innerHTML = '';
+    const width = 640;
+    const height = 220;
+    const pad = { left: 58, right: 18, top: 18, bottom: 34 };
+    const plotW = width - pad.left - pad.right;
+    const plotH = height - pad.top - pad.bottom;
+
+    if (points.length < 2) {
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', width / 2);
+        text.setAttribute('y', height / 2);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('class', 'chart-empty');
+        text.textContent = 'Waiting for history';
+        svg.appendChild(text);
+        return;
+    }
+
+    state.window = clampChartWindow(state.window, points.length);
+    const visiblePoints = points.slice(state.window.start, state.window.end + 1);
+    const values = visiblePoints.map((point) => point.value);
+    let minY = Math.min(...values);
+    let maxY = Math.max(...values);
+    if (minY === maxY) {
+        minY -= 1;
+        maxY += 1;
+    }
+    const buffer = (maxY - minY) * 0.08;
+    minY -= buffer;
+    maxY += buffer;
+
+    const xAt = (index) => pad.left + (plotW * index) / (visiblePoints.length - 1);
+    const yAt = (value) => pad.top + plotH - ((value - minY) / (maxY - minY)) * plotH;
+
+    const grid = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    grid.setAttribute('class', 'chart-grid-lines');
+    for (let i = 0; i < 4; i += 1) {
+        const y = pad.top + (plotH * i) / 3;
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', pad.left);
+        line.setAttribute('x2', width - pad.right);
+        line.setAttribute('y1', y);
+        line.setAttribute('y2', y);
+        grid.appendChild(line);
+
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', pad.left - 8);
+        label.setAttribute('y', y + 4);
+        label.setAttribute('text-anchor', 'end');
+        label.textContent = (maxY - ((maxY - minY) * i) / 3).toFixed(1);
+        grid.appendChild(label);
+    }
+    svg.appendChild(grid);
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute(
+        'd',
+        visiblePoints.map((point, index) => `${index === 0 ? 'M' : 'L'} ${xAt(index).toFixed(2)} ${yAt(point.value).toFixed(2)}`).join(' ')
+    );
+    path.setAttribute('class', 'chart-line');
+    svg.appendChild(path);
+
+    const lastPoint = visiblePoints[visiblePoints.length - 1];
+    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    dot.setAttribute('cx', xAt(visiblePoints.length - 1));
+    dot.setAttribute('cy', yAt(lastPoint.value));
+    dot.setAttribute('r', 4);
+    dot.setAttribute('class', 'chart-dot');
+    svg.appendChild(dot);
+
+    const firstLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    firstLabel.setAttribute('x', pad.left);
+    firstLabel.setAttribute('y', height - 10);
+    firstLabel.setAttribute('class', 'chart-date');
+    firstLabel.textContent = visiblePoints[0].date;
+    svg.appendChild(firstLabel);
+
+    const lastLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    lastLabel.setAttribute('x', width - pad.right);
+    lastLabel.setAttribute('y', height - 10);
+    lastLabel.setAttribute('text-anchor', 'end');
+    lastLabel.setAttribute('class', 'chart-date');
+    lastLabel.textContent = lastPoint.date;
+    svg.appendChild(lastLabel);
+
+    const rangeLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    rangeLabel.setAttribute('x', width / 2);
+    rangeLabel.setAttribute('y', height - 10);
+    rangeLabel.setAttribute('text-anchor', 'middle');
+    rangeLabel.setAttribute('class', 'chart-date');
+    rangeLabel.textContent = `${visiblePoints.length}/${points.length} points`;
+    svg.appendChild(rangeLabel);
+}
+
+async function loadTradingStatus() {
+    try {
+        const [latestResponse, historyResponse] = await Promise.all([
+            fetch('data/trading-status.json', { cache: 'no-store' }),
+            fetch('data/trading-status-history.json', { cache: 'no-store' })
+        ]);
+        if (!latestResponse.ok) throw new Error('status json unavailable');
+        const data = await latestResponse.json();
+        const history = historyResponse.ok ? await historyResponse.json() : [];
+        const option = data.option || {};
+        const futures = data.futures || {};
+
+        setText('status-updated', data.updated_at_utc ? new Date(data.updated_at_utc).toLocaleString() : 'Unavailable');
+        setText('status-option-total', formatIndex(Number(option.index)));
+        setText('status-futures-index', formatIndex(Number(futures.index)));
+        setText('status-option-positions', formatOptionPositions(option.positions));
+        setText('status-futures-position', formatFuturesPosition(futures.positions));
+
+        drawCurve('option-curve', Array.isArray(history) ? history : [], 'option_index');
+        drawCurve('futures-curve', Array.isArray(history) ? history : [], 'futures_index');
+    } catch (error) {
+        setText('status-updated', 'Snapshot unavailable');
+    }
+}
+
+loadTradingStatus();
+</script>
 
 </body>
 </html>

@@ -1,0 +1,15 @@
+{
+  "base_currency": "INDEX",
+  "futures": {
+    "index": 100,
+    "label": "BTC Futures Strategy",
+    "positions": [],
+    "symbol": "BTCUSDT"
+  },
+  "option": {
+    "index": 100,
+    "label": "Binance Options",
+    "positions": []
+  },
+  "updated_at_utc": null
+}
